@@ -1,11 +1,11 @@
-# HelloWorldTest
+# The Challenge
 
-Write a 'Hello World' program.
-
-* The program has 1 current business requirement – write “Hello World” to the console/screen.
-* The program should have an API that is separated from the program logic to eventually support mobile applications, web applications, or console applications, or windows services.
-* The program should support future enhancements for writing to a database, console application, etc.
-  * Use Common design patterns (inheritance, e.g.) to account for these future concerns.
-  * Use configuration files or another industry-standard mechanism for determining where to write the information to.
-
-Write unit tests to support the API.
+* Using the tools and languages of your choice, create a simple to-do web application.
+  * Sample data with tasks is provided in the attached file. You can use these tasks as a starting point
+  * We do not require that the application connect to a database for this exercise (it might be a nice-to-have if there is enough time left on the call at the end)
+* The application should allow a user to:
+  * Create a task item
+  * Edit a task item
+  * Check off the task item
+  * Remove the task item
+  * If you have time to add additional features feel free to explain and show us
