@@ -61,4 +61,8 @@
     </ItemGroup>
   </Target>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /y $(SolutionDir)docs\todo.json $(ProjectDir)$(OutDir)" />
+  </Target>
+
 </Project>
