@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Todo.Models;
+using TodoWebApplication.Models;
 
-namespace Todo.Repositories
+namespace TodoWebApplication.Repositories
 {
     public class TodoRepository : ITodoRepository
     {
@@ -16,7 +15,7 @@ namespace Todo.Repositories
                 Title = "todo 1",
                 Description = "pick up groceries",
                 Complete = true,
-                Date = new DateTime(2929, 1, 23),
+                Date = new DateTime(2920, 1, 23),
                 Priority = "high"
             },
             new TodoModel
@@ -25,7 +24,7 @@ namespace Todo.Repositories
                 Title = "todo 2",
                 Description = "study javascript",
                 Complete = false,
-                Date = new DateTime(2929, 1, 23),
+                Date = new DateTime(2920, 1, 23),
                 Priority = "high"
             },
             new TodoModel
@@ -34,7 +33,7 @@ namespace Todo.Repositories
                 Title = "todo 3",
                 Description = "go to gym",
                 Complete = false,
-                Date = new DateTime(2929, 1, 23),
+                Date = new DateTime(2920, 1, 23),
                 Priority = "low"
             },
             new TodoModel
@@ -43,7 +42,7 @@ namespace Todo.Repositories
                 Title = "todo 4",
                 Description = "drive to dealership to change oil",
                 Complete = false,
-                Date = new DateTime(2929, 1, 25),
+                Date = new DateTime(2920, 1, 25),
                 Priority = "low"
             },
             new TodoModel
@@ -52,7 +51,7 @@ namespace Todo.Repositories
                 Title = "todo 5",
                 Description = "buy new headphones",
                 Complete = false,
-                Date = new DateTime(2929, 1, 23),
+                Date = new DateTime(2920, 1, 23),
                 Priority = "high"
             }
         };

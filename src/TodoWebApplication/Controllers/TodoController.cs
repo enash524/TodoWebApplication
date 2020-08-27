@@ -1,26 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Todo.Models;
-using Todo.Repositories;
+using TodoWebApplication.Models;
+using TodoWebApplication.Repositories;
 
-namespace Todo.Controllers
+namespace TodoWebApplication.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TodoController : ControllerBase
+    public class TodoController : BaseController
     {
         private readonly ITodoRepository _todoRepository;
 
         public TodoController(ITodoRepository todoRepository)
+            : base()
         {
             _todoRepository = todoRepository;
         }
 
         [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(TodoModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<TodoModel> GetTodoModelById(int id)
         {
             TodoModel model = _todoRepository.GetTodoModelById(id);
@@ -34,20 +32,22 @@ namespace Todo.Controllers
         }
 
         [HttpGet]
-        public ActionResult<TodoModel> GetTodoModels()
+        [ProducesResponseType(typeof(List<TodoModel>), StatusCodes.Status200OK)]
+        public ActionResult<List<TodoModel>> GetTodoModels()
         {
             return Ok(_todoRepository.GetTodoModels());
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(TodoModel), StatusCodes.Status200OK)]
         public ActionResult<TodoModel> CreateTodoModel(TodoModel model)
         {
             TodoModel result = _todoRepository.CreateTodoModel(model);
-
             return Ok(result);
         }
 
         [HttpPut("{id:int}")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public ActionResult<bool> UpdateTodoModel([FromRoute] int id, TodoModel model)
         {
             bool result = _todoRepository.UpdateTodoModel(id, model);
@@ -55,6 +55,7 @@ namespace Todo.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public ActionResult<bool> DeleteTodoModel([FromRoute] int id)
         {
             bool result = _todoRepository.DeleteTodoModel(id);

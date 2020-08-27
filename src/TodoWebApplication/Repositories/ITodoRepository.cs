@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Todo.Models;
+﻿using System.Collections.Generic;
+using TodoWebApplication.Models;
 
-namespace Todo.Repositories
+namespace TodoWebApplication.Repositories
 {
     public interface ITodoRepository
     {
