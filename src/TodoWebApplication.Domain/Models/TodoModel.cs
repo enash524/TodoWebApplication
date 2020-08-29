@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TodoWebApplication.Models
+namespace TodoWebApplication.Domain.Models
 {
     public class TodoModel
     {

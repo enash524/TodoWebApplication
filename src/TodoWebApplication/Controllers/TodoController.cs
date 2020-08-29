@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TodoWebApplication.Models;
-using TodoWebApplication.Repositories;
+using TodoWebApplication.Application.Models;
+using TodoWebApplication.Application.Queries.Todo;
+using TodoWebApplication.Data.Interfaces;
+using TodoWebApplication.Domain.Models;
 
 namespace TodoWebApplication.Controllers
 {
@@ -18,47 +21,64 @@ namespace TodoWebApplication.Controllers
 
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(TodoModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<TodoModel> GetTodoModelById(int id)
+        public async Task<ActionResult<TodoModel>> GetTodoModelById(int id)
         {
-            TodoModel model = _todoRepository.GetTodoModelById(id);
+            GetTodoByIdQuery query = new GetTodoByIdQuery
+            {
+                Id = id
+            };
 
-            if (model == null)
+            QueryResult<TodoModel> entity = await Mediator.Send(query);
+
+            if (entity.QueryResultType == QueryResultType.Invalid)
+            {
+                return BadRequest();
+            }
+
+            if (entity.QueryResultType == QueryResultType.NotFound)
             {
                 return NotFound();
             }
 
-            return Ok(model);
+            return Ok(entity.Result);
         }
 
         [HttpGet]
         [ProducesResponseType(typeof(List<TodoModel>), StatusCodes.Status200OK)]
-        public ActionResult<List<TodoModel>> GetTodoModels()
+        public async Task<ActionResult<List<TodoModel>>> GetTodoModels()
         {
-            return Ok(_todoRepository.GetTodoModels());
+            GetTodosQuery query = new GetTodosQuery();
+            QueryResult<List<TodoModel>> entity = await Mediator.Send(query);
+
+            return Ok(entity.Result);
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(TodoModel), StatusCodes.Status200OK)]
-        public ActionResult<TodoModel> CreateTodoModel(TodoModel model)
+        public async Task<ActionResult<TodoModel>> CreateTodoModel(TodoModel model)
         {
-            TodoModel result = _todoRepository.CreateTodoModel(model);
+            // TODO - USE MediatR!!!
+            TodoModel result = await _todoRepository.CreateTodoModelAsync(model);
             return Ok(result);
         }
 
         [HttpPut("{id:int}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-        public ActionResult<bool> UpdateTodoModel([FromRoute] int id, TodoModel model)
+        public async Task<ActionResult<bool>> UpdateTodoModel([FromRoute] int id, TodoModel model)
         {
-            bool result = _todoRepository.UpdateTodoModel(id, model);
+            // TODO - USE MediatR!!!
+            bool result = await _todoRepository.UpdateTodoModelAsync(id, model);
             return Ok(result);
         }
 
         [HttpDelete("{id:int}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-        public ActionResult<bool> DeleteTodoModel([FromRoute] int id)
+        public async Task<ActionResult<bool>> DeleteTodoModel([FromRoute] int id)
         {
-            bool result = _todoRepository.DeleteTodoModel(id);
+            // TODO - USE MediatR!!!
+            bool result = await _todoRepository.DeleteTodoModelAsync(id);
             return Ok(result);
         }
     }

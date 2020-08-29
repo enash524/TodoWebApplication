@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
-using TodoWebApplication.Models;
+using System.Threading.Tasks;
+using TodoWebApplication.Domain.Models;
 
-namespace TodoWebApplication.Repositories
+namespace TodoWebApplication.Data.Interfaces
 {
     public interface ITodoRepository
     {
-        TodoModel GetTodoModelById(int id);
+        Task<TodoModel> CreateTodoModelAsync(TodoModel model);
 
-        List<TodoModel> GetTodoModels();
+        Task<bool> DeleteTodoModelAsync(int id);
 
-        bool DeleteTodoModel(int id);
+        Task<TodoModel> GetTodoModelByIdAsync(int id);
 
-        TodoModel CreateTodoModel(TodoModel model);
+        Task<List<TodoModel>> GetTodoModelsAsync();
 
-        bool UpdateTodoModel(int id, TodoModel model);
+        Task<bool> UpdateTodoModelAsync(int id, TodoModel model);
     }
 }

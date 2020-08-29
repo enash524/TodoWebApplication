@@ -1,14 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
+using TodoWebApplication.Application.Models;
+using TodoWebApplication.Application.Queries.Todo;
 using TodoWebApplication.Controllers;
-using TodoWebApplication.Models;
-using TodoWebApplication.Repositories;
+using TodoWebApplication.Data.Interfaces;
+using TodoWebApplication.Domain.Models;
 using Xunit;
 
 namespace TodoWebApplication.Tests
@@ -16,6 +21,7 @@ namespace TodoWebApplication.Tests
     public class TodoControllerTests
     {
         private readonly Mock<ILogger<BaseController>> _logger = new Mock<ILogger<BaseController>>();
+        private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
         private readonly Mock<ITodoRepository> _mockTodoRepository = new Mock<ITodoRepository>();
         private readonly TodoController _todoController;
 
@@ -25,6 +31,7 @@ namespace TodoWebApplication.Tests
             ServiceCollection services = new ServiceCollection();
 
             services.AddScoped(x => _logger.Object);
+            services.AddScoped(x => _mediator.Object);
 
             httpContextAccessorMock
                 .Setup(x => x.HttpContext)
@@ -43,15 +50,19 @@ namespace TodoWebApplication.Tests
         }
 
         [Fact]
-        public void GetTodoModelById_ShouldReturnOkResult()
+        public async Task GetTodoModelById_ShouldReturnOkResult()
         {
             // Arrange
-            _mockTodoRepository
-                .Setup(x => x.GetTodoModelById(It.IsAny<int>()))
-                .Returns(new TodoModel() { Id = 1 });
+            _mediator
+                .Setup(x => x.Send(It.IsAny<GetTodoByIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new QueryResult<TodoModel>
+                {
+                    QueryResultType = QueryResultType.Success,
+                    Result = new TodoModel()
+                });
 
             // Act
-            ActionResult<TodoModel> response = _todoController.GetTodoModelById(1);
+            ActionResult<TodoModel> response = await _todoController.GetTodoModelById(1);
 
             // Assert
             using (new AssertionScope())
@@ -65,21 +76,25 @@ namespace TodoWebApplication.Tests
                     .NotBeNull()
                     .And
                     .BeOfType<OkObjectResult>();
-            }
 
-            _mockTodoRepository.Verify(x => x.GetTodoModelById(It.IsAny<int>()), Times.Once());
+                _mediator.Verify(x => x.Send(It.IsAny<GetTodoByIdQuery>(), It.IsAny<CancellationToken>()), Times.Once());
+            }
         }
 
         [Fact]
-        public void GetTodoModelById_ShouldReturnNotFoundResult()
+        public async Task GetTodoModelById_ShouldReturnNotFoundResult()
         {
             // Arrange
-            _mockTodoRepository
-                .Setup(x => x.GetTodoModelById(It.IsAny<int>()))
-                .Returns((TodoModel)null);
+            _mediator
+                .Setup(x => x.Send(It.IsAny<GetTodoByIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new QueryResult<TodoModel>
+                {
+                    QueryResultType = QueryResultType.NotFound,
+                    Result = null
+                });
 
             // Act
-            ActionResult<TodoModel> response = _todoController.GetTodoModelById(1);
+            ActionResult<TodoModel> response = await _todoController.GetTodoModelById(1);
 
             // Assert
             using (new AssertionScope())
@@ -93,21 +108,57 @@ namespace TodoWebApplication.Tests
                     .NotBeNull()
                     .And
                     .BeOfType<NotFoundResult>();
-            }
 
-            _mockTodoRepository.Verify(x => x.GetTodoModelById(It.IsAny<int>()), Times.Once());
+                _mediator.Verify(x => x.Send(It.IsAny<GetTodoByIdQuery>(), It.IsAny<CancellationToken>()), Times.Once());
+            }
         }
 
         [Fact]
-        public void GetTodoModels_ShouldReturnOkResult()
+        public async Task GetTodoModelById_ShouldReturnBadRequestResult()
         {
             // Arrange
-            _mockTodoRepository
-                .Setup(x => x.GetTodoModels())
-                .Returns(new List<TodoModel>());
+            _mediator
+                .Setup(x => x.Send(It.IsAny<GetTodoByIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new QueryResult<TodoModel>
+                {
+                    QueryResultType = QueryResultType.Invalid,
+                    Result = null
+                });
 
             // Act
-            ActionResult<List<TodoModel>> response = _todoController.GetTodoModels();
+            ActionResult<TodoModel> response = await _todoController.GetTodoModelById(-1);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                response
+                    .Should()
+                    .NotBeNull();
+
+                response.Result
+                    .Should()
+                    .NotBeNull()
+                    .And
+                    .BeOfType<BadRequestResult>();
+
+                _mediator.Verify(x => x.Send(It.IsAny<GetTodoByIdQuery>(), It.IsAny<CancellationToken>()), Times.Once());
+            }
+        }
+
+        [Fact]
+        public async Task GetTodoModels_ShouldReturnOkResult()
+        {
+            // Arrange
+            _mediator
+                .Setup(x => x.Send(It.IsAny<GetTodosQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new QueryResult<List<TodoModel>>
+                {
+                    QueryResultType = QueryResultType.Success,
+                    Result = new List<TodoModel>()
+                });
+
+            // Act
+            ActionResult<List<TodoModel>> response = await _todoController.GetTodoModels();
 
             // Assert
             using (new AssertionScope())
@@ -121,9 +172,9 @@ namespace TodoWebApplication.Tests
                     .NotBeNull()
                     .And
                     .BeOfType<OkObjectResult>();
-            }
 
-            _mockTodoRepository.Verify(x => x.GetTodoModels(), Times.Once());
+                _mediator.Verify(x => x.Send(It.IsAny<GetTodosQuery>(), It.IsAny<CancellationToken>()), Times.Once());
+            }
         }
     }
 }

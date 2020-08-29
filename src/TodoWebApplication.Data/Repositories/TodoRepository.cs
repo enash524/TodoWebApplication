@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TodoWebApplication.Models;
+using System.Threading.Tasks;
+using TodoWebApplication.Data.Interfaces;
+using TodoWebApplication.Domain.Models;
 
-namespace TodoWebApplication.Repositories
+namespace TodoWebApplication.Data.Repositories
 {
     public class TodoRepository : ITodoRepository
     {
@@ -56,28 +58,28 @@ namespace TodoWebApplication.Repositories
             }
         };
 
-        public TodoModel GetTodoModelById(int id)
+        public Task<TodoModel> CreateTodoModelAsync(TodoModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteTodoModelAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TodoModel> GetTodoModelByIdAsync(int id)
         {
             TodoModel model = _todoModels.FirstOrDefault(m => m.Id == id);
-            return model;
+            return Task.FromResult(model);
         }
 
-        public List<TodoModel> GetTodoModels()
+        public Task<List<TodoModel>> GetTodoModelsAsync()
         {
-            return _todoModels;
+            return Task.FromResult(_todoModels);
         }
 
-        public bool DeleteTodoModel(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TodoModel CreateTodoModel(TodoModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool UpdateTodoModel(int id, TodoModel model)
+        public Task<bool> UpdateTodoModelAsync(int id, TodoModel model)
         {
             throw new NotImplementedException();
         }
