@@ -44,7 +44,7 @@ namespace TodoWebApplication.Application.Queries.Todo
 
             if (!validationResult.IsValid)
             {
-                _logger.LogError("GetTodoByIdQuery with Id: {id} produced errors on validation {errors}", request.Id, validationResult.ToString());
+                _logger.LogError("GetTodoByIdQuery with Id: {id} produced errors on validation {errors}.", request.Id, validationResult.ToString());
 
                 return new QueryResult<TodoModel>
                 {
