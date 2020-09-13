@@ -15,21 +15,18 @@ namespace TodoWebApplication.Application.Queries.Todo
     /// </summary>
     public class GetTodosQueryHandler : IRequestHandler<GetTodosQuery, QueryResult<List<TodoModel>>>
     {
-        private readonly ILogger<GetTodoByIdQueryHandler> _logger;
+        private readonly ILogger<GetTodosQueryHandler> _logger;
         private readonly ITodoRepository _todoRepository;
-        private readonly IValidator<GetTodoByIdQuery> _validator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetTodosQueryHandler`1"/> class.
         /// </summary>
         public GetTodosQueryHandler(
-            ILogger<GetTodoByIdQueryHandler> logger,
-            ITodoRepository todoRepository,
-            IValidator<GetTodoByIdQuery> validator)
+            ILogger<GetTodosQueryHandler> logger,
+            ITodoRepository todoRepository)
         {
             _logger = logger;
             _todoRepository = todoRepository;
-            _validator = validator;
         }
 
         /// <summary>
