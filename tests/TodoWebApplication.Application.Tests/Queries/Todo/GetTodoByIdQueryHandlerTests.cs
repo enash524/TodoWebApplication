@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
 using TodoWebApplication.Application.Models;
@@ -18,7 +19,7 @@ namespace TodoWebApplication.Application.Tests.Queries.Todo
         private readonly GetTodoByIdQueryHandler _handler;
         private readonly Mock<ILogger<GetTodoByIdQueryHandler>> _logger;
         private readonly Mock<ITodoRepository> _todoRepository;
-        private readonly GetTodoByIdQueryValidator _validator;
+        private readonly IValidator<GetTodoByIdQuery> _validator;
 
         public GetTodoByIdQueryHandlerTests()
         {
