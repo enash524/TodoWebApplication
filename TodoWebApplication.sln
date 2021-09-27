@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoWebApplication", "src\T
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{9AD65A36-267B-4828-B8C5-A2357BF2303E}"
 	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
 		ReadMe.md = ReadMe.md
 		docs\todo.json = docs\todo.json
 	EndProjectSection
@@ -23,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoWebApplication.Domain",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoWebApplication.Data", "src\TodoWebApplication.Data\TodoWebApplication.Data.csproj", "{BEDCDD6B-1197-42FA-ABF7-54BDB4CCF1CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoWebApplication.Application.Tests", "tests\TodoWebApplication.Application.Tests\TodoWebApplication.Application.Tests.csproj", "{CD4C6A78-89C3-46BE-8ED0-135C2D5AD457}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoWebApplication.Application.Tests", "tests\TodoWebApplication.Application.Tests\TodoWebApplication.Application.Tests.csproj", "{CD4C6A78-89C3-46BE-8ED0-135C2D5AD457}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
